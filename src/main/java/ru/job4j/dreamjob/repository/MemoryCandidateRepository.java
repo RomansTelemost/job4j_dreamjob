@@ -2,7 +2,6 @@ package ru.job4j.dreamjob.repository;
 
 import org.springframework.stereotype.Repository;
 import ru.job4j.dreamjob.model.Candidate;
-import ru.job4j.dreamjob.model.Vacancy;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -37,8 +36,8 @@ public class MemoryCandidateRepository implements CandidateRepository {
     }
 
     @Override
-    public void deleteById(int id) {
-        candidates.remove(id);
+    public boolean deleteById(int id) {
+        return candidates.remove(id) != null;
     }
 
     @Override
