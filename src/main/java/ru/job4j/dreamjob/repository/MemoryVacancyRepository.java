@@ -13,7 +13,6 @@ import java.util.Optional;
 public class MemoryVacancyRepository implements VacancyRepository {
 
     private int nextId = 1;
-
     private final Map<Integer, Vacancy> vacancies = new HashMap<>();
 
     private MemoryVacancyRepository() {
