@@ -19,12 +19,18 @@ public class MemoryVacancyRepository implements VacancyRepository {
     private final Map<Integer, Vacancy> vacancies = new ConcurrentHashMap<>();
 
     private MemoryVacancyRepository() {
-        save(new Vacancy(0, "Intern Java Developer", "Good desc", LocalDateTime.of(2023, 9, 3, 10, 10), true));
-        save(new Vacancy(0, "Junior Java Developer", "Same", LocalDateTime.of(2023, 9, 3, 10, 11), true));
-        save(new Vacancy(0, "Junior+ Java Developer", "Same 2", LocalDateTime.of(2023, 9, 3, 10, 12), true));
-        save(new Vacancy(0, "Middle Java Developer", "Bad", LocalDateTime.of(2023, 9, 3, 10, 13), true));
-        save(new Vacancy(0, "Middle+ Java Developer", "Very bad", LocalDateTime.of(2023, 9, 3, 10, 14), true));
-        save(new Vacancy(0, "Senior Java Developer", "Brilliant", LocalDateTime.of(2023, 9, 3, 10, 15), true));
+        save(new Vacancy(0, "Intern Java Developer", "Good desc",
+                LocalDateTime.of(2023, 9, 3, 10, 10), true, 1));
+        save(new Vacancy(0, "Junior Java Developer", "Same",
+                LocalDateTime.of(2023, 9, 3, 10, 11), true, 1));
+        save(new Vacancy(0, "Junior+ Java Developer", "Same 2",
+                LocalDateTime.of(2023, 9, 3, 10, 12), true, 2));
+        save(new Vacancy(0, "Middle Java Developer", "Bad",
+                LocalDateTime.of(2023, 9, 3, 10, 13), true, 2));
+        save(new Vacancy(0, "Middle+ Java Developer", "Very bad",
+                LocalDateTime.of(2023, 9, 3, 10, 14), true, 3));
+        save(new Vacancy(0, "Senior Java Developer", "Brilliant",
+                LocalDateTime.of(2023, 9, 3, 10, 15), true, 3));
     }
 
     @Override
@@ -45,7 +51,8 @@ public class MemoryVacancyRepository implements VacancyRepository {
                 vacancy.getTitle(),
                 vacancy.getDescription(),
                 vacancy.getCreationDate(),
-                vacancy.getVisible())) != null;
+                vacancy.getVisible(),
+                vacancy.getCityId())) != null;
     }
 
     @Override
