@@ -10,7 +10,11 @@ import ru.job4j.dreamjob.service.SimpleVacancyService;
 @RequestMapping("/vacancies") /* Работать с кандидатами будем по URI /vacancies/** */
 public class VacancyController {
 
-    private final SimpleVacancyService service = SimpleVacancyService.getInstance();
+    private final SimpleVacancyService service;
+
+    public VacancyController(SimpleVacancyService service) {
+        this.service = service;
+    }
 
     @GetMapping
     public String getAll(Model model) {
