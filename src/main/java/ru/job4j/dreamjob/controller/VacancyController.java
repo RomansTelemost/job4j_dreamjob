@@ -27,7 +27,7 @@ public class VacancyController {
 
     @GetMapping("/create")
     public String getCreationPage(Model model) {
-        model.addAttribute("cities", cityService.findAl());
+        model.addAttribute("cities", cityService.findAll());
         return "vacancies/create";
     }
 
@@ -44,7 +44,7 @@ public class VacancyController {
             model.addAttribute("message", "Вакансия с указанным идентификатором не найдена");
             return "errors/404";
         }
-        model.addAttribute("cities", cityService.findAl());
+        model.addAttribute("cities", cityService.findAll());
         model.addAttribute("vacancy", vacancyOptional.get());
         return "vacancies/one";
     }

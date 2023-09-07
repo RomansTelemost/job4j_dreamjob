@@ -16,7 +16,7 @@ public class SimpleCityService implements CityService {
     }
 
     @Override
-    public Collection<City> findAl() {
+    public Collection<City> findAll() {
         return cityRepository.findAll();
     }
 }
