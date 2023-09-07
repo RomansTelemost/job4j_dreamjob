@@ -4,15 +4,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.dreamjob.model.Candidate;
-import ru.job4j.dreamjob.service.SimpleCandidateService;
+import ru.job4j.dreamjob.service.CandidateService;
 
 @Controller
 @RequestMapping("/candidates")
 public class CandidateController {
 
-    private final SimpleCandidateService service;
+    private final CandidateService service;
 
-    public CandidateController(SimpleCandidateService service) {
+    public CandidateController(CandidateService service) {
         this.service = service;
     }
 
