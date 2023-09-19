@@ -1,7 +1,6 @@
 package ru.job4j.dreamjob.repository;
 
 import net.jcip.annotations.ThreadSafe;
-import org.springframework.stereotype.Repository;
 import ru.job4j.dreamjob.model.Candidate;
 
 import java.time.LocalDateTime;
@@ -11,7 +10,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Repository
+//@Repository
 @ThreadSafe
 public class MemoryCandidateRepository implements CandidateRepository {
 
