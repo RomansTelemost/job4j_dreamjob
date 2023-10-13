@@ -38,7 +38,7 @@ public class UserController {
 
     @GetMapping("/register")
     public String getRegistrationPage(Model model, HttpServletRequest request) {
-        model.addAttribute("user", new User());
+        model.addAttribute("user", request.getSession().getAttribute("user"));
         return "users/register";
     }
 
@@ -56,7 +56,7 @@ public class UserController {
     @GetMapping
     public String getAll(Model model, HttpServletRequest request) {
         model.addAttribute("users", userService.findAll());
-        request.getSession().setAttribute("user", new User());
+        request.getSession().setAttribute("user", request.getSession().getAttribute("user"));
         return "users/list";
     }
 
