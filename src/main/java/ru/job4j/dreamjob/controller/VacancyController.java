@@ -26,14 +26,14 @@ public class VacancyController {
     @GetMapping
     public String getAll(Model model, HttpServletRequest request) {
         model.addAttribute("vacancies", vacancyService.findAll());
-        model.addAttribute("user",request.getSession().getAttribute("user"));
+        model.addAttribute("user", request.getSession().getAttribute("user"));
         return "vacancies/list";
     }
 
     @GetMapping("/create")
     public String getCreationPage(Model model, HttpServletRequest request) {
         model.addAttribute("cities", cityService.findAll());
-        model.addAttribute("user",request.getSession().getAttribute("user"));
+        model.addAttribute("user", request.getSession().getAttribute("user"));
         return "vacancies/create";
     }
 
