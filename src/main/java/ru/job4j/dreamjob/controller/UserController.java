@@ -56,7 +56,7 @@ public class UserController {
     @GetMapping
     public String getAll(Model model, HttpServletRequest request) {
         model.addAttribute("users", userService.findAll());
-        request.getSession().setAttribute("user", request.getSession().getAttribute("user"));
+        model.addAttribute("user", request.getSession().getAttribute("user"));
         return "users/list";
     }
 

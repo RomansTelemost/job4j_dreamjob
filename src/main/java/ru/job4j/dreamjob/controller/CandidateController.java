@@ -49,7 +49,7 @@ public class CandidateController {
     }
 
     @GetMapping("/{id}")
-    public String getById(Model model, @PathVariable int id) {
+    public String getById(Model model, @PathVariable int id, HttpServletRequest request) {
         var candidateOptional = candidateService.findById(id);
         if (candidateOptional.isEmpty()) {
             model.addAttribute("message", "Кандидат с указанным идентификатором не найден");
@@ -57,6 +57,7 @@ public class CandidateController {
         }
         model.addAttribute("cities", cityService.findAll());
         model.addAttribute("candidate", candidateOptional.get());
+        model.addAttribute("user", request.getSession().getAttribute("user"));
         return "candidates/one";
     }
 

@@ -18,7 +18,6 @@ public class IndexController {
             user.setName("Гость");
             session.setAttribute("user", user);
         }
-        System.out.println(session.getId());
         model.addAttribute("user", user);
         return "index";
     }
