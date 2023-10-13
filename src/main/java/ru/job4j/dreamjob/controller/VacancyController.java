@@ -9,6 +9,8 @@ import ru.job4j.dreamjob.model.Vacancy;
 import ru.job4j.dreamjob.service.CityService;
 import ru.job4j.dreamjob.service.VacancyService;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequestMapping("/vacancies")
 public class VacancyController {
@@ -22,14 +24,16 @@ public class VacancyController {
     }
 
     @GetMapping
-    public String getAll(Model model) {
+    public String getAll(Model model, HttpServletRequest request) {
         model.addAttribute("vacancies", vacancyService.findAll());
+        model.addAttribute("user",request.getSession().getAttribute("user"));
         return "vacancies/list";
     }
 
     @GetMapping("/create")
-    public String getCreationPage(Model model) {
+    public String getCreationPage(Model model, HttpServletRequest request) {
         model.addAttribute("cities", cityService.findAll());
+        model.addAttribute("user",request.getSession().getAttribute("user"));
         return "vacancies/create";
     }
 
