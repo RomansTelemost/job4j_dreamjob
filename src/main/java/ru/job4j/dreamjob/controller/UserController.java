@@ -1,6 +1,5 @@
 package ru.job4j.dreamjob.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +37,6 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "Моя ошибка!")
     public String register(@ModelAttribute User user, Model model) {
         var savedUser = userService.save(user);
         if (savedUser.isEmpty()) {

@@ -35,7 +35,7 @@ public class Sql2oUserRepository implements UserRepository {
             return Optional.of(user);
         } catch (Exception exception) {
             LOG.error(exception.getMessage());
-            throw exception;
+            return Optional.empty();
         }
     }
 
