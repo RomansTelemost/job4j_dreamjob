@@ -26,14 +26,12 @@ public class CandidateController {
     @GetMapping
     public String getAll(Model model, HttpServletRequest request) {
         model.addAttribute("candidates", candidateService.findAll());
-        model.addAttribute("user", request.getSession().getAttribute("user"));
         return "candidates/list";
     }
 
     @GetMapping("/create")
     public String getCreationPage(Model model, HttpServletRequest request) {
         model.addAttribute("cities", cityService.findAll());
-        model.addAttribute("user", request.getSession().getAttribute("user"));
         return "candidates/create";
     }
 
@@ -57,7 +55,6 @@ public class CandidateController {
         }
         model.addAttribute("cities", cityService.findAll());
         model.addAttribute("candidate", candidateOptional.get());
-        model.addAttribute("user", request.getSession().getAttribute("user"));
         return "candidates/one";
     }
 
