@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @GetMapping("/register")
-    public String getRegistrationPage(Model model, HttpServletRequest request) {
+    public String getRegistrationPage() {
         return "users/register";
     }
 
@@ -53,7 +53,7 @@ public class UserController {
     }
 
     @GetMapping
-    public String getAll(Model model, HttpServletRequest request) {
+    public String getAll(Model model) {
         model.addAttribute("users", userService.findAll());
         return "users/list";
     }
