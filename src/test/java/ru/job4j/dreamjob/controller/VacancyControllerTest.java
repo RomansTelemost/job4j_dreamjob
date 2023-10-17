@@ -84,7 +84,6 @@ class VacancyControllerTest {
         assertThat(fileDto).usingRecursiveComparison().isEqualTo(actualFileDto);
     }
 
-
     @Test
     public void whenSomeExceptionThrownThenGetErrorPageWithMessage() {
         var expectedException = new RuntimeException("Failed to write file");
