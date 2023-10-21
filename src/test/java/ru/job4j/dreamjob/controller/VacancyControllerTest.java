@@ -1,5 +1,6 @@
 package ru.job4j.dreamjob.controller;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -13,6 +14,7 @@ import ru.job4j.dreamjob.service.CityService;
 import ru.job4j.dreamjob.service.VacancyService;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.time.LocalDateTime.now;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -41,9 +43,10 @@ class VacancyControllerTest {
         var vacancy1 = new Vacancy(1, "test1", "desc1", now(), true, 1, 2);
         var vacancy2 = new Vacancy(2, "test2", "desc2", now(), false, 3, 4);
         var expectedVacancies = List.of(vacancy1, vacancy2);
+        var model = new ConcurrentModel();
+
         when(vacancyService.findAll()).thenReturn(expectedVacancies);
 
-        var model = new ConcurrentModel();
         var view = vacancyController.getAll(model);
         var actualVacancies = model.getAttribute("vacancies");
 
@@ -56,14 +59,15 @@ class VacancyControllerTest {
         var city1 = new City(1, "Москва");
         var city2 = new City(2, "Санкт-Петербург");
         var expectedCities = List.of(city1, city2);
+        var model = new ConcurrentModel();
+
         when(cityService.findAll()).thenReturn(expectedCities);
 
-        var model = new ConcurrentModel();
         var view = vacancyController.getCreationPage(model);
-        var actualVacancies = model.getAttribute("cities");
+        var actualCities = model.getAttribute("cities");
 
         assertThat(view).isEqualTo("vacancies/create");
-        assertThat(actualVacancies).isEqualTo(expectedCities);
+        assertThat(actualCities).isEqualTo(expectedCities);
     }
 
     @Test
@@ -72,9 +76,10 @@ class VacancyControllerTest {
         var fileDto = new FileDto(testFile.getOriginalFilename(), testFile.getBytes());
         var vacancyArgumentCaptor = ArgumentCaptor.forClass(Vacancy.class);
         var fileDtoArgumentCaptor = ArgumentCaptor.forClass(FileDto.class);
+        var model = new ConcurrentModel();
+
         when(vacancyService.save(vacancyArgumentCaptor.capture(), fileDtoArgumentCaptor.capture())).thenReturn(vacancy);
 
-        var model = new ConcurrentModel();
         var view = vacancyController.create(vacancy, testFile, model);
         var actualVacancy = vacancyArgumentCaptor.getValue();
         var actualFileDto = fileDtoArgumentCaptor.getValue();
@@ -87,10 +92,86 @@ class VacancyControllerTest {
     @Test
     public void whenSomeExceptionThrownThenGetErrorPageWithMessage() {
         var expectedException = new RuntimeException("Failed to write file");
+        var model = new ConcurrentModel();
+
         when(vacancyService.save(any(), any())).thenThrow(expectedException);
 
-        var model = new ConcurrentModel();
         var view = vacancyController.create(new Vacancy(), testFile, model);
+        var actualExceptionMessage = model.getAttribute("message");
+
+        assertThat(view).isEqualTo("errors/404");
+        assertThat(actualExceptionMessage).isEqualTo(expectedException.getMessage());
+    }
+
+    @Test
+    public void whenGetVacancyByIdThenReturnSameVacancyAndGetVacanciesOnePage() throws Exception {
+        var vacancy = new Vacancy(1, "test1", "desc1", now(), true, 1, 2);
+        var city1 = new City(1, "Москва");
+        var city2 = new City(2, "Санкт-Петербург");
+        var expectedCities = List.of(city1, city2);
+        ConcurrentModel model = new ConcurrentModel();
+
+        when(vacancyService.findById(anyInt())).thenReturn(Optional.of(vacancy));
+        when(cityService.findAll()).thenReturn(expectedCities);
+
+        String view = vacancyController.getById(vacancy.getId(), model);
+        Assertions.assertThat(view).isEqualTo("vacancies/one");
+
+        var actualCities = model.getAttribute("cities");
+        assertThat(actualCities).isEqualTo(expectedCities);
+
+        var actualVacancy = model.getAttribute("vacancy");
+        assertThat(actualVacancy).isEqualTo(vacancy);
+    }
+
+    @Test
+    public void whenUpdateVacancyThenReturnUpdatedVacancyAndRedirectToVacanciesPage() throws Exception {
+        var vacancy = new Vacancy(1, "test1", "desc1", now(), true, 1, 2);
+        var fileDto = new FileDto(testFile.getOriginalFilename(), testFile.getBytes());
+        var vacancyArgumentCaptor = ArgumentCaptor.forClass(Vacancy.class);
+        var fileDtoArgumentCaptor = ArgumentCaptor.forClass(FileDto.class);
+        ConcurrentModel model = new ConcurrentModel();
+
+        when(vacancyService.update(vacancyArgumentCaptor.capture(), fileDtoArgumentCaptor.capture())).thenReturn(true);
+
+        String view = vacancyController.update(vacancy, testFile, model);
+        assertThat(view).isEqualTo("redirect:/vacancies");
+
+        assertThat(vacancyArgumentCaptor.getValue()).isEqualTo(vacancy);
+        assertThat(fileDtoArgumentCaptor.getValue()).usingRecursiveComparison().isEqualTo(fileDto);
+    }
+
+    @Test
+    public void whenUpdateDoesNotExistVacancyThenGetErrorPageWithMessage() {
+        var expectedException = new RuntimeException("Вакансия с указанным идентификатором не найдена");
+        ConcurrentModel model = new ConcurrentModel();
+
+        when(vacancyService.update(any(), any())).thenReturn(false);
+
+        String view = vacancyController.update(new Vacancy(), testFile, model);
+        var actualExceptionMessage = model.getAttribute("message");
+
+        assertThat(view).isEqualTo("errors/404");
+        assertThat(actualExceptionMessage).isEqualTo(expectedException.getMessage());
+    }
+
+    @Test
+    public void whenDeleteBuIdVacancyThenReturnTrueAndRedirectToVacanciesPage() {
+        ConcurrentModel model = new ConcurrentModel();
+        when(vacancyService.deleteById(anyInt())).thenReturn(true);
+
+        String view = vacancyController.delete(1, model);
+        assertThat(view).isEqualTo("redirect:/vacancies");
+    }
+
+    @Test
+    public void whenDeleteBuIdIfDoesNotExistVacancyThenReturnFalseAndGetErrorPageWithMessage() {
+        var expectedException = new RuntimeException("Вакансия с указанным идентификатором не найдена");
+        ConcurrentModel model = new ConcurrentModel();
+
+        when(vacancyService.deleteById(anyInt())).thenReturn(false);
+
+        String view = vacancyController.delete(1, model);
         var actualExceptionMessage = model.getAttribute("message");
 
         assertThat(view).isEqualTo("errors/404");
