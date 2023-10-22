@@ -25,14 +25,13 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String loginUser(@ModelAttribute User user, Model model, HttpServletRequest request) {
+    public String loginUser(@ModelAttribute User user, HttpServletRequest request, Model model) {
         var userOptional = userService.findByEmailAndPassword(user.getEmail(), user.getPassword());
         if (userOptional.isEmpty()) {
             model.addAttribute("error", "Почта или пароль введены неверно");
             return "users/login";
         }
-        HttpSession session = request.getSession();
-        session.setAttribute("user", userOptional.get());
+        request.getSession().setAttribute("user", userOptional.get());
         return "redirect:/vacancies";
     }
 
@@ -42,7 +41,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute User user, Model model, HttpServletRequest request) {
+    public String register(@ModelAttribute User user, HttpServletRequest request, Model model) {
         var savedUser = userService.save(user);
         if (savedUser.isEmpty()) {
             model.addAttribute("message", "Пользователь с такой почтой уже существует");
@@ -59,7 +58,7 @@ public class UserController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(Model model, @PathVariable int id) {
+    public String delete(@PathVariable int id, Model model) {
         var isDeleted = userService.deleteById(id);
         if (!isDeleted) {
             model.addAttribute("message", "Ошибка удаления вакансии");
