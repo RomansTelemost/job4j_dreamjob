@@ -17,7 +17,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
-
 class UserControllerTest {
 
     @Mock
@@ -25,7 +24,6 @@ class UserControllerTest {
 
     @InjectMocks
     private UserController userController;
-
 
     @BeforeEach
     public void init() {

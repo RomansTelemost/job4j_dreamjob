@@ -182,6 +182,4 @@ class CandidateControllerTest {
         assertThat(view).isEqualTo("errors/404");
         assertThat(actualExceptionMessage).isEqualTo(expectedException.getMessage());
     }
-
-
 }
